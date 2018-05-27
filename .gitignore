@@ -1,3 +1,5 @@
 /output
 /venv
 __pycache__
+/credentials.mk
+/pages/navigation.yml

@@ -15,6 +15,9 @@ TEMPLATEHTML=$(shell find template/ -type f -name "*.html")
 RAWSOURCES=$(shell find pages/ -type f ! -name "*.md" ! -name "navigation.yml" -printf "output/%P\n")
 RAWTEMPLATE=$(shell find template/ -type f ! -name "*.html" -printf "output/%P\n")
 
+# Include maybe SFTP credentials
+-include credentials.mk
+
 # Disable built-in rules
 .SUFFIXES:
 
@@ -24,7 +27,7 @@ RAWTEMPLATE=$(shell find template/ -type f ! -name "*.html" -printf "output/%P\n
 all: $(STRUCTURE) $(RAWTEMPLATE) $(RAWSOURCES) $(MDHTML)
 
 pages/navigation.yml output/sitemap.xml: $(MDFILES)
-	python3 build-navigation.py --baseurl https://www.esterilizacion-perros.es
+	python3 build-navigation.py --baseurl $(BASEURL)
 
 output//:
 	mkdir -p $@
@@ -63,5 +66,8 @@ clean:
 	rm -f pages/navigation.yml
 	rm -rf output
 
-server:
+server: all
 	cd output && python3 -m http.server 8000
+
+upload: all
+	lftp -e "mirror -R output $(SFTPROOT); quit" -u "$(SFTPUSER)","$(SFTPPASS)" "$(SFTPHOST)"
