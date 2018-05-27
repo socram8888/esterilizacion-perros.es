@@ -1,0 +1,28 @@
+
+blockquote {
+	padding: 1rem 2rem;
+    margin: 0 1rem 1rem;
+    background-color: #eee;
+    border: #888 solid;
+    border-width: 0 2px;
+}
+
+blockquote > p:last-child {
+	margin-bottom: 0;
+}
+
+main {
+	padding-top: 6rem;
+}
+
+.jumboimage {
+	background-position: center; background-size: cover;
+}
+
+h1 {
+	border-bottom: solid #ccc 1px;
+}
+
+p {
+	text-indent: 1.5em;
+}

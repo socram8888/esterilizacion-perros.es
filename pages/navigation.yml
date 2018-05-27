@@ -1,0 +1,12 @@
+!Section
+children:
+- !Section
+  children: []
+  url: /enfermedades/
+  name: Enfermedades asociadas
+- !Section
+  children: []
+  url: /faq/
+  name: ¿Dudas?
+url: /
+name: Ventajas y desventajas
