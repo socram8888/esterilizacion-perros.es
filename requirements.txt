@@ -1,0 +1,15 @@
+# Jinja2 for rendering the templates
+Jinja2==2.10
+
+# Markdown, for rendering the documents
+Markdown==2.6.11
+
+# YAML for reading document metadata
+ruamel.yaml==0.15.37
+
+# lxml, used for generating the sitemap
+lxml==4.2.1
+
+# Minification packages
+csscompressor==0.9.5
+htmlmin==0.1.12

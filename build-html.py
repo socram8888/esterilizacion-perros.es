@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import htmlmin
 import jinja2
 import markdown
 import os
@@ -14,6 +15,7 @@ if __name__ == '__main__':
 	parser.add_argument('--output', help='output file', type=argparse.FileType('w'), default=sys.stdout)
 	parser.add_argument('--template', help='template folder', type=str, default='template')
 	parser.add_argument('--navigation', help='navigation file', type=str, default='pages/navigation.yml')
+	parser.add_argument('--no-optimize', action='store_false', help='disable HTML minification')
 	args = parser.parse_args()
 
 	loader = jinja2.PrefixLoader(
@@ -42,4 +44,8 @@ if __name__ == '__main__':
 
 	template = env.get_template('template@template.html')
 	page_html = template.render(content=jinja2.Markup(page_content), meta=page_meta, home=root_section)
+
+	if args.no_optimize is not False:
+		page_html = htmlmin.minify(page_html)
+
 	args.output.write(page_html)
