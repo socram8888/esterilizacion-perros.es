@@ -1,4 +1,7 @@
 
+# Folder structure
+STRUCTURE=$(shell find pages/ template/ -type d -printf "output/%P/\n")
+
 # All raw Markdown source files
 MDFILES=$(shell find pages/ -type f -name "*.md")
 
@@ -17,46 +20,43 @@ RAWTEMPLATE=$(shell find template/ -type f ! -name "*.html" -printf "output/%P\n
 
 .PHONY: all clean
 
-# Copy resources, then generate HTMLs
-all: $(RAWTEMPLATE) $(RAWSOURCES) $(MDHTML)
+# Generate structure, copy resources, then generate HTMLs
+all: $(STRUCTURE) $(RAWTEMPLATE) $(RAWSOURCES) $(MDHTML)
 
 pages/navigation.yml output/sitemap.xml: $(MDFILES)
 	python3 build-navigation.py --baseurl https://www.esterilizacion-perros.es
 
+output//:
+	mkdir -p $@
+
+output/%/:
+	mkdir -p $@
+
 output/%.html: pages/%.md pages/navigation.yml $(TEMPLATEHTML)
-	mkdir -p $(dir $@)
 	python3 build-html.py --input $< --output $@
 
 output/%.jpg: pages/%.jpg
-	mkdir -p $(dir $@)
 	convert $< -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG $@
 
 output/%.jpg: template/%.jpg
-	mkdir -p $(dir $@)
 	convert $< -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG $@
 
 output/%.png: pages/%.png
-	mkdir -p $(dir $@)
 	convert $< -strip $@
 
 output/%.png: template/%.png
-	mkdir -p $(dir $@)
 	convert $< -strip $@
 
 output/%.css: pages/%.css
-	mkdir -p $(dir $@)
 	python3 -m csscompressor $< -o $@
 
 output/%.css: template/%.css
-	mkdir -p $(dir $@)
 	python3 -m csscompressor $< -o $@
 
 output/%: pages/%
-	mkdir -p $(dir $@)
 	cp $< $@
 
 output/%: template/%
-	mkdir -p $(dir $@)
 	cp $< $@
 
 clean:
