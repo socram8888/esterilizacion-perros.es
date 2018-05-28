@@ -1,0 +1,22 @@
+# Security headers
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+Header always set X-Frame-Options DENY
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Redirect to root so we can send HSTS with preload
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://esterilizacion-perros.es/$1 [R=301,L]
+
+# Then redirect to canonical
+RewriteCond %{HTTP_HOST} !^www\.esterilizacion-perros\.es$
+RewriteRule (.*) https://www.esterilizacion-perros.es/$1 [R=301,L]
+
+# Caching
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType application/pdf "access 1 month"
+ExpiresByType image/x-icon "access 1 month"
+ExpiresDefault "access 1 hour"
+</IfModule>
